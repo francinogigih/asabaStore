@@ -7,3 +7,7 @@ type Product struct {
 	Description string `json:"description"`
 	Active      bool   `json:"active"`
 }
+
+type GetProducts struct {
+	Active bool `query:"active"`
+}
