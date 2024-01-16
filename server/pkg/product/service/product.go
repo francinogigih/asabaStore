@@ -39,3 +39,7 @@ func (s ProductService) Update(product *Product) error {
 	}
 	return s.productRepository.Update(&data, product.Code)
 }
+
+func (s ProductService) GetList(active bool) ([]core.Product, error) {
+	return s.productRepository.GetList(active)
+}
