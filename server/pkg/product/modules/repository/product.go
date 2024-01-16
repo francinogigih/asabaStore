@@ -1,6 +1,7 @@
 package repository
 
 import (
+	appErr "asaba/pkg/common/http"
 	"asaba/pkg/product/core"
 	"errors"
 
@@ -40,7 +41,20 @@ func (repo *PostgresDBRepository) Create(data *core.Product) (string, error) {
 	result := repo.collection.Create(&product)
 
 	if result.Error != nil {
-		return "", errors.New("Internal Server Error")
+		return "", errors.New(appErr.ErrInternalServer)
 	}
 	return product.Code, nil
+}
+
+func (repo *PostgresDBRepository) Update(data *core.Product, code string) error {
+	product := repo.newProductData(data)
+	result := repo.collection.Where("code = ?", code).Updates(&product)
+
+	if result.RowsAffected == 0 {
+		return errors.New(appErr.ErrNotFound)
+	}
+	if result.Error != nil {
+		return errors.New(appErr.ErrInternalServer)
+	}
+	return nil
 }
