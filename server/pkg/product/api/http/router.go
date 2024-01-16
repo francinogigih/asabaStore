@@ -11,4 +11,5 @@ func RegisterPath(e *echo.Echo, h *Handler) {
 	}
 	e.POST("v1/products", h.Create)
 	e.PUT("v1/products/:code", h.Update)
+	e.GET("v1/products", h.GetList)
 }

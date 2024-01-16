@@ -3,6 +3,7 @@ package http
 import (
 	common "asaba/pkg/common/http"
 	"asaba/pkg/product/api/http/request"
+	"asaba/pkg/product/api/http/response"
 	"asaba/pkg/product/service"
 	"net/http"
 
@@ -49,4 +50,18 @@ func (h *Handler) Update(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, common.NewSuccessResponse())
+}
+
+func (h *Handler) GetList(c echo.Context) error {
+	req := new(request.GetProducts)
+	c.Bind(req)
+
+	products, err := h.service.GetList(req.Active)
+	if err != nil {
+		errResp := common.RenderErrorResponse(err)
+		return c.JSON(errResp.Code, errResp)
+	}
+
+	resp := response.NewGetProductsResponse(products)
+	return c.JSON(http.StatusOK, resp)
 }
