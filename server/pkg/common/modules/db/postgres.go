@@ -49,5 +49,5 @@ func DatabaseConnection() *gorm.DB {
 	}
 
 	db.AutoMigrate(&product.Product{})
-	return db
+	return db.Debug()
 }
