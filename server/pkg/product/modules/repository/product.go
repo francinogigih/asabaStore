@@ -36,6 +36,16 @@ func (repo *PostgresDBRepository) newProductData(product *core.Product) Product 
 	}
 }
 
+func (repo *PostgresDBRepository) toProductCore(product *Product) core.Product {
+	return core.Product{
+		Code:        product.Code,
+		Name:        product.Name,
+		Total:       product.Total,
+		Description: product.Description,
+		Active:      product.Active,
+	}
+}
+
 func (repo *PostgresDBRepository) Create(data *core.Product) (string, error) {
 	product := repo.newProductData(data)
 	result := repo.collection.Create(&product)
@@ -57,4 +67,19 @@ func (repo *PostgresDBRepository) Update(data *core.Product, code string) error 
 		return errors.New(appErr.ErrInternalServer)
 	}
 	return nil
+}
+
+func (repo *PostgresDBRepository) GetList(active bool) ([]core.Product, error) {
+	var records []Product
+	result := repo.collection.Where("active = ?", active).Find(&records)
+	if result.Error != nil {
+		return nil, errors.New(appErr.ErrNotFound)
+	}
+
+	var products []core.Product
+	for _, record := range records {
+		products = append(products, repo.toProductCore(&record))
+	}
+
+	return products, nil
 }
