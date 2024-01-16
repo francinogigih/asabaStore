@@ -1,6 +1,7 @@
 package http
 
 import (
+	common "asaba/pkg/common/http"
 	"asaba/pkg/product/api/http/request"
 	"asaba/pkg/product/service"
 	"net/http"
@@ -20,7 +21,7 @@ func NewHandler(service service.ProductService) *Handler {
 }
 
 func (h *Handler) Create(c echo.Context) error {
-	req := new(request.CreateProduct)
+	req := new(request.Product)
 	c.Bind(req)
 
 	dto := newProductData(*req)
@@ -32,5 +33,20 @@ func (h *Handler) Create(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, code)
+	resp := common.NewCreatedSuccessResponse(code)
+	return c.JSON(resp.Code, resp)
+}
+
+func (h *Handler) Update(c echo.Context) error {
+	req := new(request.Product)
+	req.Code = c.Param("code")
+	c.Bind(req)
+
+	dto := newUpdateProductData(*req)
+	if err := h.service.Update(dto); err != nil {
+		errResp := common.RenderErrorResponse(err)
+		return c.JSON(errResp.Code, errResp)
+	}
+
+	return c.JSON(http.StatusOK, common.NewSuccessResponse())
 }

@@ -5,7 +5,17 @@ import (
 	"asaba/pkg/product/service"
 )
 
-func newProductData(params request.CreateProduct) *service.Product {
+func newProductData(params request.Product) *service.Product {
+	return &service.Product{
+		Code:        params.Code,
+		Name:        params.Name,
+		Total:       params.Total,
+		Description: params.Description,
+		Active:      params.Active,
+	}
+}
+
+func newUpdateProductData(params request.Product) *service.Product {
 	return &service.Product{
 		Code:        params.Code,
 		Name:        params.Name,

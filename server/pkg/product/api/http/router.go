@@ -10,4 +10,5 @@ func RegisterPath(e *echo.Echo, h *Handler) {
 		panic("item controller cannot be nil")
 	}
 	e.POST("v1/products", h.Create)
+	e.PUT("v1/products/:code", h.Update)
 }
