@@ -21,8 +21,9 @@ func NewHandler(service service.ProductService) *Handler {
 
 func (h *Handler) Create(c echo.Context) error {
 	req := new(request.CreateProduct)
-	dto := newProductData(*req)
+	c.Bind(req)
 
+	dto := newProductData(*req)
 	code, err := h.service.Create(dto)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]interface{}{
