@@ -29,3 +29,13 @@ func (s ProductService) Create(product *Product) (string, error) {
 
 	return id, nil
 }
+
+func (s ProductService) Update(product *Product) error {
+	data := core.Product{
+		Name:        product.Name,
+		Total:       product.Total,
+		Description: product.Description,
+		Active:      product.Active,
+	}
+	return s.productRepository.Update(&data, product.Code)
+}
