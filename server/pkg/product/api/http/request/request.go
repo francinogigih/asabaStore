@@ -1,6 +1,6 @@
 package request
 
-type CreateProduct struct {
+type Product struct {
 	Code        string `json:"code"`
 	Name        string `json:"name"`
 	Total       int64  `json:"total"`
